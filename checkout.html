@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>AlmaFit — Finalizar Pedido</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--pink:#C0206A;--pink-lt:#D93A7E;--black:#0C0C0C;--off:#F7F4F0;--charcoal:#171717;--display:'Bebas Neue',sans-serif;--sans:'DM Sans',sans-serif}
+body{font-family:var(--sans);background:var(--black);color:var(--off);min-height:100vh}
+nav{padding:0 4rem;height:70px;display:flex;align-items:center;justify-content:space-between;background:rgba(12,12,12,0.95);border-bottom:1px solid rgba(192,32,106,0.2);position:sticky;top:0;z-index:100}
+.nav-logo img{height:42px;width:42px;border-radius:50%;object-fit:cover}
+.nav-back{color:rgba(247,244,240,0.5);text-decoration:none;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s;display:flex;align-items:center;gap:8px}
+.nav-back:hover{color:var(--off)}
+.checkout-wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem;display:grid;grid-template-columns:1fr 400px;gap:3rem}
+h1{font-family:var(--display);font-size:48px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2.5rem;color:var(--off)}
+.section-title{font-family:var(--display);font-size:22px;letter-spacing:1px;text-transform:uppercase;color:var(--off);margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid #1e1e1e}
+/* FORM */
+.form-group{margin-bottom:1.25rem}
+label{display:block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:.5rem}
+input,select{width:100%;background:#111;border:1px solid #222;color:var(--off);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:3px;outline:none;transition:border-color .2s}
+input:focus,select:focus{border-color:var(--pink)}
+input::placeholder{color:#444}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-row-3{display:grid;grid-template-columns:120px 1fr 80px;gap:1rem}
+/* PAGAMENTO */
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
+.pay-method{background:#111;border:1.5px solid #222;border-radius:4px;padding:1rem;cursor:pointer;transition:all .2s;text-align:center}
+.pay-method.active{border-color:var(--pink);background:rgba(192,32,106,.08)}
+.pay-icon{font-size:24px;margin-bottom:.4rem}
+.pay-label{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#888}
+.pay-method.active .pay-label{color:var(--pink-lt)}
+.pix-info{background:#111;border:1px solid #1e1e1e;border-radius:4px;padding:1.25rem;margin-bottom:1.5rem;display:none}
+.pix-info.show{display:block}
+.pix-info p{font-size:14px;color:#888;line-height:1.6}
+#cardForm{display:none}
+#cardForm.show{display:block}
+#cardFormContainer .form-group{margin-bottom:1rem}
+/* RESUMO */
+.resumo{background:var(--charcoal);border-radius:6px;padding:2rem;border:1px solid #1e1e1e;position:sticky;top:100px;height:fit-content}
+.resumo h2{font-family:var(--display);font-size:24px;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
+.resumo-item{display:flex;justify-content:space-between;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid #111}
+.resumo-item-info{flex:1}
+.resumo-item-name{font-size:14px;color:var(--off);margin-bottom:2px}
+.resumo-item-detail{font-size:12px;color:#555}
+.resumo-item-price{font-family:var(--display);font-size:16px;color:var(--off);flex-shrink:0;margin-left:1rem}
+.resumo-empty{color:#555;font-size:14px;text-align:center;padding:2rem 0}
+.resumo-divider{border:none;border-top:1px solid #222;margin:1rem 0}
+.resumo-row{display:flex;justify-content:space-between;font-size:14px;color:#666;margin-bottom:.5rem}
+.resumo-total{display:flex;justify-content:space-between;align-items:center;margin-top:1rem}
+.resumo-total-label{font-size:13px;text-transform:uppercase;letter-spacing:1px;color:#888}
+.resumo-total-value{font-family:var(--display);font-size:32px;color:#fff}
+.btn-pagar{display:block;width:100%;background:var(--pink);color:#fff;font-family:var(--display);font-size:20px;letter-spacing:2px;text-transform:uppercase;padding:16px;border:none;border-radius:2px;cursor:pointer;margin-top:1.5rem;transition:background .2s}
+.btn-pagar:hover{background:var(--pink-lt)}
+.btn-pagar:disabled{background:#333;color:#666;cursor:not-allowed}
+/* SUCESSO */
+.success-screen{display:none;text-align:center;padding:6rem 2rem;max-width:600px;margin:0 auto}
+.success-screen.show{display:block}
+.checkout-wrap.hide{display:none}
+.success-icon{font-size:72px;margin-bottom:2rem}
+.success-screen h2{font-family:var(--display);font-size:56px;letter-spacing:1px;text-transform:uppercase;color:var(--off);margin-bottom:1rem}
+.success-screen p{font-size:16px;color:#777;line-height:1.7;margin-bottom:.5rem}
+.success-num{font-family:var(--display);font-size:24px;color:var(--pink-lt);margin:1rem 0 2rem}
+.pix-qr{background:#111;border:1px solid #1e1e1e;border-radius:6px;padding:2rem;margin:2rem 0;display:none}
+.pix-qr.show{display:block}
+.pix-code{font-family:monospace;font-size:13px;color:#888;word-break:break-all;background:#0a0a0a;padding:1rem;border-radius:4px;margin-top:1rem;text-align:left}
+.copy-btn{background:var(--pink);color:#fff;border:none;padding:10px 20px;border-radius:3px;cursor:pointer;font-size:13px;font-weight:600;margin-top:.75rem}
+/* LOADING */
+.loading{display:none;text-align:center;padding:2rem}
+.loading.show{display:block}
+.spinner{width:40px;height:40px;border:3px solid #222;border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo"><img src="data:image/jpeg;base64,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" alt="AlmaFit"></a>
+  <a href="index.html" class="nav-back">← Voltar à loja</a>
+</nav>
+
+<!-- SUCESSO -->
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">✅</div>
+  <h2>Pedido realizado!</h2>
+  <p>Seu pedido foi confirmado com sucesso.</p>
+  <div class="success-num" id="successNum"></div>
+  <div class="pix-qr" id="pixQr">
+    <p style="font-size:14px;color:#888;margin-bottom:.5rem">Escaneie o QR Code ou copie o código PIX:</p>
+    <div id="qrImage"></div>
+    <div class="pix-code" id="pixCopiaECola"></div>
+    <button class="copy-btn" onclick="copiarPix()">📋 Copiar código PIX</button>
+  </div>
+  <p id="successMsg" style="color:#777;font-size:14px;margin-top:1rem"></p>
+  <br><a href="index.html" style="color:var(--pink-lt);font-size:14px">← Continuar comprando</a>
+</div>
+
+<div class="checkout-wrap" id="checkoutWrap">
+  <div>
+    <h1>Finalizar Pedido</h1>
+
+    <!-- DADOS PESSOAIS -->
+    <div class="section-title">Dados pessoais</div>
+    <div class="form-row" style="margin-bottom:1.25rem">
+      <div class="form-group" style="margin:0"><label>Nome completo</label><input type="text" id="nome" placeholder="Seu nome"></div>
+      <div class="form-group" style="margin:0"><label>E-mail</label><input type="email" id="email" placeholder="seu@email.com"></div>
+    </div>
+    <div class="form-row" style="margin-bottom:2rem">
+      <div class="form-group" style="margin:0"><label>CPF</label><input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14"></div>
+      <div class="form-group" style="margin:0"><label>Telefone / WhatsApp</label><input type="text" id="telefone" placeholder="(21) 99999-9999"></div>
+    </div>
+
+    <!-- ENTREGA -->
+    <div class="section-title">Endereço de entrega</div>
+    <div class="form-row" style="margin-bottom:1.25rem">
+      <div class="form-group" style="margin:0"><label>CEP</label><input type="text" id="cep" placeholder="00000-000" maxlength="9" onblur="buscarCep()"></div>
+      <div class="form-group" style="margin:0"><label>Estado</label><input type="text" id="estado" placeholder="RJ"></div>
+    </div>
+    <div class="form-group"><label>Cidade</label><input type="text" id="cidade" placeholder="Rio de Janeiro"></div>
+    <div class="form-row-3" style="margin-bottom:1.25rem">
+      <div class="form-group" style="margin:0"><label>Número</label><input type="text" id="numero" placeholder="123"></div>
+      <div class="form-group" style="margin:0"><label>Rua / Bairro</label><input type="text" id="rua" placeholder="Rua das Flores, Ipanema"></div>
+      <div style=""></div>
+    </div>
+
+    <!-- PAGAMENTO -->
+    <div class="section-title">Forma de pagamento</div>
+    <div class="pay-methods">
+      <div class="pay-method active" onclick="selectPay('pix',this)" id="payPix">
+        <div class="pay-icon">📱</div>
+        <div class="pay-label">PIX</div>
+      </div>
+      <div class="pay-method" onclick="selectPay('card',this)" id="payCard">
+        <div class="pay-icon">💳</div>
+        <div class="pay-label">Cartão de crédito</div>
+      </div>
+    </div>
+
+    <div class="pix-info show" id="pixInfo">
+      <p>✅ Aprovação instantânea · Sem taxas · Gera QR Code na hora</p>
+    </div>
+
+    <div id="cardForm">
+      <div id="cardFormContainer"></div>
+    </div>
+
+    <div class="loading" id="loadingPay">
+      <div class="spinner"></div>
+      <p style="color:#666;font-size:14px">Processando pagamento...</p>
+    </div>
+
+    <button class="btn-pagar" id="btnPagar" onclick="processarPagamento()">
+      Pagar agora →
+    </button>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo">
+    <h2>Resumo</h2>
+    <div id="resumoItems"><div class="resumo-empty">Carrinho vazio</div></div>
+    <hr class="resumo-divider">
+    <div class="resumo-row"><span>Subtotal</span><span id="rSubtotal">R$ 0,00</span></div>
+    <div class="resumo-row"><span>Frete</span><span id="rFrete">A calcular</span></div>
+    <div class="resumo-total">
+      <span class="resumo-total-label">Total</span>
+      <span class="resumo-total-value" id="rTotal">R$ 0,00</span>
+    </div>
+    <button class="btn-pagar" onclick="processarPagamento()">Pagar agora →</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
+const MP_ACCESS_TOKEN = 'APP_USR-8735693995303736-061118-40fee9101947c899d47b740aecf65636-3466637951';
+const MP_PUBLIC_KEY = 'APP_USR-c7f639fd-cc32-48a7-a2ee-00bf5c3b1c0a';
+
+let cart = JSON.parse(localStorage.getItem('almafit_cart') || '[]');
+let payMethod = 'pix';
+let mp, cardFormInstance;
+
+// Inicializar Mercado Pago
+const mpInstance = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+
+function selectPay(method, el) {
+  payMethod = method;
+  document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('pixInfo').classList.toggle('show', method === 'pix');
+  document.getElementById('cardForm').classList.toggle('show', method === 'card');
+  if(method === 'card' && !cardFormInstance) initCardForm();
+}
+
+function initCardForm() {
+  cardFormInstance = mpInstance.cardForm({
+    amount: String(getTotal()),
+    iframe: true,
+    form: {
+      id: 'cardFormContainer',
+      cardNumber: {label:'Número do cartão', placeholder:'0000 0000 0000 0000'},
+      expirationDate: {label:'Validade', placeholder:'MM/YY'},
+      securityCode: {label:'CVV', placeholder:'123'},
+      cardholderName: {label:'Nome no cartão', placeholder:'NOME COMO NO CARTÃO'},
+      issuer: {label:'Banco emissor', placeholder:'Selecione'},
+      installments: {label:'Parcelas', placeholder:'Selecione'},
+    },
+    callbacks: {
+      onFormMounted: e => { if(e) console.error('cardForm mount error', e); },
+    }
+  });
+}
+
+// Resumo
+function renderResumo() {
+  const el = document.getElementById('resumoItems');
+  if(!cart.length) { el.innerHTML = '<div class="resumo-empty">Carrinho vazio</div>'; return; }
+  el.innerHTML = cart.map(i => `
+    <div class="resumo-item">
+      <div class="resumo-item-info">
+        <div class="resumo-item-name">${i.nome}</div>
+        <div class="resumo-item-detail">Tam: ${i.tamanho} · Qtd: ${i.qty}</div>
+      </div>
+      <div class="resumo-item-price">R$ ${(i.preco*i.qty).toFixed(2).replace('.',',')}</div>
+    </div>`).join('');
+  const sub = getTotal();
+  document.getElementById('rSubtotal').textContent = 'R$ ' + sub.toFixed(2).replace('.',',');
+  document.getElementById('rTotal').textContent = 'R$ ' + sub.toFixed(2).replace('.',',');
+}
+
+function getTotal() { return cart.reduce((s,i) => s+i.preco*i.qty, 0); }
+
+// Buscar CEP
+async function buscarCep() {
+  const cep = document.getElementById('cep').value.replace(/\D/g,'');
+  if(cep.length !== 8) return;
+  try {
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if(!d.erro) {
+      document.getElementById('rua').value = d.logradouro + (d.bairro ? ', ' + d.bairro : '');
+      document.getElementById('cidade').value = d.localidade;
+      document.getElementById('estado').value = d.uf;
+    }
+  } catch(e) {}
+}
+
+// Máscaras
+document.getElementById('cpf').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'');
+  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  this.value = v;
+});
+document.getElementById('cep').addEventListener('input', function() {
+  let v = this.value.replace(/\D/g,'');
+  v = v.replace(/(\d{5})(\d)/,'$1-$2');
+  this.value = v;
+});
+
+function gerarNumero() {
+  return 'ALM' + Date.now().toString().slice(-8);
+}
+
+async function salvarPedido(numero, mpPaymentId, mpStatus, formaPagamento) {
+  const pedido = {
+    numero,
+    status: mpStatus === 'approved' ? 'pago' : 'aguardando_pagamento',
+    cliente_nome: document.getElementById('nome').value,
+    cliente_email: document.getElementById('email').value,
+    cliente_telefone: document.getElementById('telefone').value,
+    cliente_cep: document.getElementById('cep').value,
+    cliente_endereco: [document.getElementById('rua').value, document.getElementById('numero').value, document.getElementById('cidade').value, document.getElementById('estado').value].filter(Boolean).join(', '),
+    itens: cart,
+    subtotal: getTotal(),
+    frete: 0,
+    total: getTotal(),
+    forma_pagamento: formaPagamento,
+    mp_payment_id: mpPaymentId || '',
+    mp_status: mpStatus || ''
+  };
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
+    method: 'POST',
+    headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
+    body: JSON.stringify(pedido)
+  });
+  return await res.json();
+}
+
+async function processarPagamento() {
+  if(!cart.length) { alert('Carrinho vazio!'); return; }
+  const nome = document.getElementById('nome').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const cpf = document.getElementById('cpf').value.replace(/\D/g,'');
+  if(!nome || !email || !cpf) { alert('Preencha nome, e-mail e CPF.'); return; }
+
+  document.getElementById('btnPagar').disabled = true;
+  document.getElementById('loadingPay').classList.add('show');
+
+  try {
+    if(payMethod === 'pix') {
+      await processarPix(nome, email, cpf);
+    } else {
+      await processarCartao(nome, email, cpf);
+    }
+  } catch(e) {
+    console.error(e);
+    alert('Erro ao processar pagamento: ' + e.message);
+    document.getElementById('btnPagar').disabled = false;
+    document.getElementById('loadingPay').classList.remove('show');
+  }
+}
+
+async function processarPix(nome, email, cpf) {
+  const total = getTotal();
+  const [firstName, ...rest] = nome.split(' ');
+  const payload = {
+    transaction_amount: total,
+    description: 'AlmaFit — Pedido',
+    payment_method_id: 'pix',
+    payer: {
+      email,
+      first_name: firstName,
+      last_name: rest.join(' ') || firstName,
+      identification: {type:'CPF', number: cpf}
+    }
+  };
+
+  const res = await fetch('https://api.mercadopago.com/v1/payments', {
+    method: 'POST',
+    headers: {'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': 'almafit_' + Date.now()},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if(data.error) throw new Error(data.message || data.error);
+
+  const numero = gerarNumero();
+  await salvarPedido(numero, String(data.id), data.status, 'pix');
+  localStorage.removeItem('almafit_cart');
+
+  // Mostrar tela de sucesso com QR Code
+  document.getElementById('checkoutWrap').classList.add('hide');
+  document.getElementById('loadingPay').classList.remove('show');
+  const ss = document.getElementById('successScreen');
+  ss.classList.add('show');
+  document.getElementById('successNum').textContent = 'Pedido #' + numero;
+  document.getElementById('successMsg').textContent = 'Aguardando confirmação do PIX. Você receberá um e-mail quando o pagamento for aprovado.';
+
+  if(data.point_of_interaction?.transaction_data) {
+    const txData = data.point_of_interaction.transaction_data;
+    document.getElementById('pixQr').classList.add('show');
+    if(txData.qr_code_base64) {
+      document.getElementById('qrImage').innerHTML = `<img src="data:image/png;base64,${txData.qr_code_base64}" style="width:200px;height:200px;margin:0 auto;display:block;border-radius:4px">`;
+    }
+    document.getElementById('pixCopiaECola').textContent = txData.qr_code || '';
+    window._pixCode = txData.qr_code || '';
+  }
+}
+
+async function processarCartao(nome, email, cpf) {
+  const cardData = await cardFormInstance.getCardFormData();
+  const total = getTotal();
+  const [firstName, ...rest] = nome.split(' ');
+  const payload = {
+    transaction_amount: total,
+    token: cardData.token,
+    description: 'AlmaFit — Pedido',
+    installments: parseInt(cardData.installments),
+    payment_method_id: cardData.paymentMethodId,
+    payer: {
+      email,
+      identification: {type:'CPF', number: cpf}
+    }
+  };
+
+  const res = await fetch('https://api.mercadopago.com/v1/payments', {
+    method: 'POST',
+    headers: {'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': 'almafit_' + Date.now()},
+    body: JSON.stringify(payload)
+  });
+  const data = await res.json();
+  if(data.error) throw new Error(data.message || data.error);
+
+  const numero = gerarNumero();
+  await salvarPedido(numero, String(data.id), data.status, 'cartao');
+  localStorage.removeItem('almafit_cart');
+
+  document.getElementById('checkoutWrap').classList.add('hide');
+  document.getElementById('loadingPay').classList.remove('show');
+  const ss = document.getElementById('successScreen');
+  ss.classList.add('show');
+  document.getElementById('successNum').textContent = 'Pedido #' + numero;
+  const statusMsg = data.status === 'approved' ? '✅ Pagamento aprovado! Você receberá um e-mail de confirmação.' : '⏳ Pagamento em análise. Você receberá um e-mail quando for aprovado.';
+  document.getElementById('successMsg').textContent = statusMsg;
+}
+
+function copiarPix() {
+  if(window._pixCode) {
+    navigator.clipboard.writeText(window._pixCode);
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = '✅ Copiado!';
+    setTimeout(() => btn.textContent = '📋 Copiar código PIX', 2000);
+  }
+}
+
+renderResumo();
+</script>
+</body>
+</html>
