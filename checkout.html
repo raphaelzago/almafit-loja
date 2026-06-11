@@ -15,9 +15,8 @@ nav{padding:0 4rem;height:70px;display:flex;align-items:center;justify-content:s
 .nav-back{color:rgba(247,244,240,0.5);text-decoration:none;font-size:12px;font-weight:500;letter-spacing:1.5px;text-transform:uppercase;transition:color .2s;display:flex;align-items:center;gap:8px}
 .nav-back:hover{color:var(--off)}
 .checkout-wrap{max-width:1100px;margin:0 auto;padding:4rem 2rem;display:grid;grid-template-columns:1fr 400px;gap:3rem}
-h1{font-family:var(--display);font-size:48px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2.5rem;color:var(--off)}
+h1{font-family:var(--display);font-size:48px;letter-spacing:1px;text-transform:uppercase;margin-bottom:2.5rem}
 .section-title{font-family:var(--display);font-size:22px;letter-spacing:1px;text-transform:uppercase;color:var(--off);margin-bottom:1.5rem;padding-bottom:.75rem;border-bottom:1px solid #1e1e1e}
-/* FORM */
 .form-group{margin-bottom:1.25rem}
 label{display:block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:.5rem}
 input,select{width:100%;background:#111;border:1px solid #222;color:var(--off);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:3px;outline:none;transition:border-color .2s}
@@ -25,20 +24,25 @@ input:focus,select:focus{border-color:var(--pink)}
 input::placeholder{color:#444}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .form-row-3{display:grid;grid-template-columns:120px 1fr 80px;gap:1rem}
-/* PAGAMENTO */
 .pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem}
 .pay-method{background:#111;border:1.5px solid #222;border-radius:4px;padding:1rem;cursor:pointer;transition:all .2s;text-align:center}
 .pay-method.active{border-color:var(--pink);background:rgba(192,32,106,.08)}
 .pay-icon{font-size:24px;margin-bottom:.4rem}
 .pay-label{font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#888}
 .pay-method.active .pay-label{color:var(--pink-lt)}
-.pix-info{background:#111;border:1px solid #1e1e1e;border-radius:4px;padding:1.25rem;margin-bottom:1.5rem;display:none}
-.pix-info.show{display:block}
-.pix-info p{font-size:14px;color:#888;line-height:1.6}
-#cardForm{display:none}
-#cardForm.show{display:block}
-#cardFormContainer .form-group{margin-bottom:1rem}
-/* RESUMO */
+.pix-info{background:#111;border:1px solid #1e1e1e;border-radius:4px;padding:1.25rem;margin-bottom:1.5rem}
+#cardSection{display:none;margin-bottom:1.5rem}
+#cardSection.show{display:block}
+/* MP card form iframes */
+#form-checkout__cardNumber,
+#form-checkout__expirationDate,
+#form-checkout__securityCode{height:46px;background:#111;border:1px solid #222;border-radius:3px;padding:0 14px;margin-bottom:1rem}
+#form-checkout__cardholderName,
+#form-checkout__issuer,
+#form-checkout__installments,
+#form-checkout__identificationType,
+#form-checkout__identificationNumber{width:100%;background:#111;border:1px solid #222;color:var(--off);font-family:var(--sans);font-size:15px;padding:12px 14px;border-radius:3px;outline:none;margin-bottom:1rem}
+.mp-label{display:block;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:#666;margin-bottom:.4rem}
 .resumo{background:var(--charcoal);border-radius:6px;padding:2rem;border:1px solid #1e1e1e;position:sticky;top:100px;height:fit-content}
 .resumo h2{font-family:var(--display);font-size:24px;letter-spacing:1px;text-transform:uppercase;margin-bottom:1.5rem;padding-bottom:1rem;border-bottom:1px solid #222}
 .resumo-item{display:flex;justify-content:space-between;align-items:flex-start;padding:.75rem 0;border-bottom:1px solid #111}
@@ -55,23 +59,23 @@ input::placeholder{color:#444}
 .btn-pagar{display:block;width:100%;background:var(--pink);color:#fff;font-family:var(--display);font-size:20px;letter-spacing:2px;text-transform:uppercase;padding:16px;border:none;border-radius:2px;cursor:pointer;margin-top:1.5rem;transition:background .2s}
 .btn-pagar:hover{background:var(--pink-lt)}
 .btn-pagar:disabled{background:#333;color:#666;cursor:not-allowed}
-/* SUCESSO */
 .success-screen{display:none;text-align:center;padding:6rem 2rem;max-width:600px;margin:0 auto}
 .success-screen.show{display:block}
 .checkout-wrap.hide{display:none}
 .success-icon{font-size:72px;margin-bottom:2rem}
-.success-screen h2{font-family:var(--display);font-size:56px;letter-spacing:1px;text-transform:uppercase;color:var(--off);margin-bottom:1rem}
+.success-screen h2{font-family:var(--display);font-size:56px;letter-spacing:1px;text-transform:uppercase;margin-bottom:1rem}
 .success-screen p{font-size:16px;color:#777;line-height:1.7;margin-bottom:.5rem}
 .success-num{font-family:var(--display);font-size:24px;color:var(--pink-lt);margin:1rem 0 2rem}
 .pix-qr{background:#111;border:1px solid #1e1e1e;border-radius:6px;padding:2rem;margin:2rem 0;display:none}
 .pix-qr.show{display:block}
-.pix-code{font-family:monospace;font-size:13px;color:#888;word-break:break-all;background:#0a0a0a;padding:1rem;border-radius:4px;margin-top:1rem;text-align:left}
+.pix-code{font-family:monospace;font-size:12px;color:#888;word-break:break-all;background:#0a0a0a;padding:1rem;border-radius:4px;margin-top:1rem;text-align:left}
 .copy-btn{background:var(--pink);color:#fff;border:none;padding:10px 20px;border-radius:3px;cursor:pointer;font-size:13px;font-weight:600;margin-top:.75rem}
-/* LOADING */
-.loading{display:none;text-align:center;padding:2rem}
+.loading{display:none;text-align:center;padding:1.5rem 0}
 .loading.show{display:block}
-.spinner{width:40px;height:40px;border:3px solid #222;border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem}
+.spinner{width:36px;height:36px;border:3px solid #222;border-top-color:var(--pink);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto .75rem}
 @keyframes spin{to{transform:rotate(360deg)}}
+.err-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);color:#f87171;padding:12px 16px;border-radius:3px;font-size:14px;margin-bottom:1rem;display:none}
+.err-msg.show{display:block}
 </style>
 </head>
 <body>
@@ -81,11 +85,10 @@ input::placeholder{color:#444}
   <a href="index.html" class="nav-back">← Voltar à loja</a>
 </nav>
 
-<!-- SUCESSO -->
 <div class="success-screen" id="successScreen">
   <div class="success-icon">✅</div>
   <h2>Pedido realizado!</h2>
-  <p>Seu pedido foi confirmado com sucesso.</p>
+  <p>Seu pedido foi confirmado.</p>
   <div class="success-num" id="successNum"></div>
   <div class="pix-qr" id="pixQr">
     <p style="font-size:14px;color:#888;margin-bottom:.5rem">Escaneie o QR Code ou copie o código PIX:</p>
@@ -101,68 +104,80 @@ input::placeholder{color:#444}
   <div>
     <h1>Finalizar Pedido</h1>
 
-    <!-- DADOS PESSOAIS -->
     <div class="section-title">Dados pessoais</div>
     <div class="form-row" style="margin-bottom:1.25rem">
-      <div class="form-group" style="margin:0"><label>Nome completo</label><input type="text" id="nome" placeholder="Seu nome"></div>
+      <div class="form-group" style="margin:0"><label>Nome completo</label><input type="text" id="nome" placeholder="Seu nome completo"></div>
       <div class="form-group" style="margin:0"><label>E-mail</label><input type="email" id="email" placeholder="seu@email.com"></div>
     </div>
     <div class="form-row" style="margin-bottom:2rem">
       <div class="form-group" style="margin:0"><label>CPF</label><input type="text" id="cpf" placeholder="000.000.000-00" maxlength="14"></div>
-      <div class="form-group" style="margin:0"><label>Telefone / WhatsApp</label><input type="text" id="telefone" placeholder="(21) 99999-9999"></div>
+      <div class="form-group" style="margin:0"><label>Telefone</label><input type="text" id="telefone" placeholder="(21) 99999-9999"></div>
     </div>
 
-    <!-- ENTREGA -->
     <div class="section-title">Endereço de entrega</div>
     <div class="form-row" style="margin-bottom:1.25rem">
       <div class="form-group" style="margin:0"><label>CEP</label><input type="text" id="cep" placeholder="00000-000" maxlength="9" onblur="buscarCep()"></div>
       <div class="form-group" style="margin:0"><label>Estado</label><input type="text" id="estado" placeholder="RJ"></div>
     </div>
     <div class="form-group"><label>Cidade</label><input type="text" id="cidade" placeholder="Rio de Janeiro"></div>
-    <div class="form-row-3" style="margin-bottom:1.25rem">
-      <div class="form-group" style="margin:0"><label>Número</label><input type="text" id="numero" placeholder="123"></div>
+    <div class="form-row" style="margin-bottom:2rem">
       <div class="form-group" style="margin:0"><label>Rua / Bairro</label><input type="text" id="rua" placeholder="Rua das Flores, Ipanema"></div>
-      <div style=""></div>
+      <div class="form-group" style="margin:0"><label>Número</label><input type="text" id="numero" placeholder="123"></div>
     </div>
 
-    <!-- PAGAMENTO -->
-    <div class="section-title">Forma de pagamento</div>
+    <div class="section-title">Pagamento</div>
     <div class="pay-methods">
-      <div class="pay-method active" onclick="selectPay('pix',this)" id="payPix">
+      <div class="pay-method active" id="payPix" onclick="selectPay('pix',this)">
         <div class="pay-icon">📱</div>
         <div class="pay-label">PIX</div>
       </div>
-      <div class="pay-method" onclick="selectPay('card',this)" id="payCard">
+      <div class="pay-method" id="payCard" onclick="selectPay('card',this)">
         <div class="pay-icon">💳</div>
         <div class="pay-label">Cartão de crédito</div>
       </div>
     </div>
 
-    <div class="pix-info show" id="pixInfo">
-      <p>✅ Aprovação instantânea · Sem taxas · Gera QR Code na hora</p>
+    <div class="pix-info" id="pixInfo">
+      ✅ Aprovação instantânea · Sem taxas · QR Code gerado na hora
     </div>
 
-    <div id="cardForm">
-      <div id="cardFormContainer"></div>
+    <!-- CARTÃO — form nativo do Mercado Pago -->
+    <div id="cardSection">
+      <div class="err-msg" id="cardErr"></div>
+      <label class="mp-label">Nome no cartão</label>
+      <input type="text" id="form-checkout__cardholderName" placeholder="NOME COMO NO CARTÃO">
+      <label class="mp-label">Número do cartão</label>
+      <div id="form-checkout__cardNumber"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div>
+          <label class="mp-label">Validade</label>
+          <div id="form-checkout__expirationDate"></div>
+        </div>
+        <div>
+          <label class="mp-label">CVV</label>
+          <div id="form-checkout__securityCode"></div>
+        </div>
+      </div>
+      <label class="mp-label">Banco emissor</label>
+      <select id="form-checkout__issuer"></select>
+      <label class="mp-label">Parcelas</label>
+      <select id="form-checkout__installments"></select>
     </div>
 
+    <div class="err-msg" id="errMsg"></div>
     <div class="loading" id="loadingPay">
       <div class="spinner"></div>
       <p style="color:#666;font-size:14px">Processando pagamento...</p>
     </div>
-
-    <button class="btn-pagar" id="btnPagar" onclick="processarPagamento()">
-      Pagar agora →
-    </button>
+    <button class="btn-pagar" id="btnPagar" onclick="processarPagamento()">Pagar agora →</button>
   </div>
 
-  <!-- RESUMO -->
   <div class="resumo">
     <h2>Resumo</h2>
     <div id="resumoItems"><div class="resumo-empty">Carrinho vazio</div></div>
     <hr class="resumo-divider">
     <div class="resumo-row"><span>Subtotal</span><span id="rSubtotal">R$ 0,00</span></div>
-    <div class="resumo-row"><span>Frete</span><span id="rFrete">A calcular</span></div>
+    <div class="resumo-row"><span>Frete</span><span>A calcular</span></div>
     <div class="resumo-total">
       <span class="resumo-total-label">Total</span>
       <span class="resumo-total-value" id="rTotal">R$ 0,00</span>
@@ -172,51 +187,63 @@ input::placeholder{color:#444}
 </div>
 
 <script>
-const SUPABASE_URL = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
-const MP_ACCESS_TOKEN = 'APP_USR-8735693995303736-061118-40fee9101947c899d47b740aecf65636-3466637951';
+const SUPABASE_URL  = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
+const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
 const MP_PUBLIC_KEY = 'APP_USR-c7f639fd-cc32-48a7-a2ee-00bf5c3b1c0a';
+const MP_ACCESS_TOKEN = 'APP_USR-8735693995303736-061118-40fee9101947c899d47b740aecf65636-3466637951';
 
 let cart = JSON.parse(localStorage.getItem('almafit_cart') || '[]');
 let payMethod = 'pix';
-let mp, cardFormInstance;
+let mpInstance, cardFormInstance, cardFormReady = false;
 
-// Inicializar Mercado Pago
-const mpInstance = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+// Init MP
+window.addEventListener('load', () => {
+  mpInstance = new MercadoPago(MP_PUBLIC_KEY, {locale:'pt-BR'});
+});
 
 function selectPay(method, el) {
   payMethod = method;
   document.querySelectorAll('.pay-method').forEach(e => e.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('pixInfo').classList.toggle('show', method === 'pix');
-  document.getElementById('cardForm').classList.toggle('show', method === 'card');
-  if(method === 'card' && !cardFormInstance) initCardForm();
+  const isCard = method === 'card';
+  document.getElementById('pixInfo').style.display    = isCard ? 'none' : '';
+  document.getElementById('cardSection').classList.toggle('show', isCard);
+  if(isCard && !cardFormInstance) initCardForm();
 }
 
 function initCardForm() {
+  cardFormReady = false;
   cardFormInstance = mpInstance.cardForm({
     amount: String(getTotal()),
     iframe: true,
     form: {
-      id: 'cardFormContainer',
-      cardNumber: {label:'Número do cartão', placeholder:'0000 0000 0000 0000'},
-      expirationDate: {label:'Validade', placeholder:'MM/YY'},
-      securityCode: {label:'CVV', placeholder:'123'},
-      cardholderName: {label:'Nome no cartão', placeholder:'NOME COMO NO CARTÃO'},
-      issuer: {label:'Banco emissor', placeholder:'Selecione'},
-      installments: {label:'Parcelas', placeholder:'Selecione'},
+      id: 'cardSection',
+      cardNumber:     { id:'form-checkout__cardNumber',     placeholder:'0000 0000 0000 0000' },
+      expirationDate: { id:'form-checkout__expirationDate', placeholder:'MM/YY' },
+      securityCode:   { id:'form-checkout__securityCode',   placeholder:'123' },
+      cardholderName: { id:'form-checkout__cardholderName'  },
+      issuer:         { id:'form-checkout__issuer'          },
+      installments:   { id:'form-checkout__installments'    },
     },
     callbacks: {
-      onFormMounted: e => { if(e) console.error('cardForm mount error', e); },
+      onFormMounted: err => {
+        if(err) { console.error('MP mount error', err); return; }
+        cardFormReady = true;
+      },
+      onError: errs => {
+        const msg = errs.map(e=>e.message).join(', ');
+        showErr('cardErr', msg);
+      }
     }
   });
 }
 
-// Resumo
+function getTotal() { return cart.reduce((s,i)=>s+i.preco*i.qty, 0); }
+
 function renderResumo() {
   const el = document.getElementById('resumoItems');
-  if(!cart.length) { el.innerHTML = '<div class="resumo-empty">Carrinho vazio</div>'; return; }
-  el.innerHTML = cart.map(i => `
+  if(!cart.length) { el.innerHTML='<div class="resumo-empty">Carrinho vazio</div>'; return; }
+  el.innerHTML = cart.map(i=>`
     <div class="resumo-item">
       <div class="resumo-item-info">
         <div class="resumo-item-name">${i.nome}</div>
@@ -225,181 +252,160 @@ function renderResumo() {
       <div class="resumo-item-price">R$ ${(i.preco*i.qty).toFixed(2).replace('.',',')}</div>
     </div>`).join('');
   const sub = getTotal();
-  document.getElementById('rSubtotal').textContent = 'R$ ' + sub.toFixed(2).replace('.',',');
-  document.getElementById('rTotal').textContent = 'R$ ' + sub.toFixed(2).replace('.',',');
+  document.getElementById('rSubtotal').textContent = fmt(sub);
+  document.getElementById('rTotal').textContent    = fmt(sub);
 }
 
-function getTotal() { return cart.reduce((s,i) => s+i.preco*i.qty, 0); }
+function fmt(n) { return 'R$ '+n.toFixed(2).replace('.',','); }
 
-// Buscar CEP
 async function buscarCep() {
   const cep = document.getElementById('cep').value.replace(/\D/g,'');
-  if(cep.length !== 8) return;
+  if(cep.length!==8) return;
   try {
     const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
     const d = await r.json();
     if(!d.erro) {
-      document.getElementById('rua').value = d.logradouro + (d.bairro ? ', ' + d.bairro : '');
+      document.getElementById('rua').value    = d.logradouro+(d.bairro?', '+d.bairro:'');
       document.getElementById('cidade').value = d.localidade;
       document.getElementById('estado').value = d.uf;
     }
   } catch(e) {}
 }
 
-// Máscaras
-document.getElementById('cpf').addEventListener('input', function() {
-  let v = this.value.replace(/\D/g,'');
-  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
-  this.value = v;
+document.getElementById('cpf').addEventListener('input', function(){
+  let v=this.value.replace(/\D/g,'');
+  v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  this.value=v;
 });
-document.getElementById('cep').addEventListener('input', function() {
-  let v = this.value.replace(/\D/g,'');
-  v = v.replace(/(\d{5})(\d)/,'$1-$2');
-  this.value = v;
+document.getElementById('cep').addEventListener('input', function(){
+  let v=this.value.replace(/\D/g,'');
+  v=v.replace(/(\d{5})(\d)/,'$1-$2');
+  this.value=v;
 });
 
-function gerarNumero() {
-  return 'ALM' + Date.now().toString().slice(-8);
+function showErr(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = '⚠️ '+msg; el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 5000);
 }
 
-async function salvarPedido(numero, mpPaymentId, mpStatus, formaPagamento) {
-  const pedido = {
-    numero,
-    status: mpStatus === 'approved' ? 'pago' : 'aguardando_pagamento',
+function setLoading(on) {
+  document.getElementById('loadingPay').classList.toggle('show', on);
+  document.getElementById('btnPagar').disabled = on;
+}
+
+function gerarNumero() { return 'ALM'+Date.now().toString().slice(-8); }
+
+async function salvarPedido(numero, mpId, mpStatus, forma) {
+  const payload = {
+    numero, status: mpStatus==='approved'?'pago':'aguardando_pagamento',
     cliente_nome: document.getElementById('nome').value,
     cliente_email: document.getElementById('email').value,
     cliente_telefone: document.getElementById('telefone').value,
     cliente_cep: document.getElementById('cep').value,
     cliente_endereco: [document.getElementById('rua').value, document.getElementById('numero').value, document.getElementById('cidade').value, document.getElementById('estado').value].filter(Boolean).join(', '),
-    itens: cart,
-    subtotal: getTotal(),
-    frete: 0,
-    total: getTotal(),
-    forma_pagamento: formaPagamento,
-    mp_payment_id: mpPaymentId || '',
-    mp_status: mpStatus || ''
+    itens: cart, subtotal: getTotal(), frete: 0, total: getTotal(),
+    forma_pagamento: forma, mp_payment_id: String(mpId||''), mp_status: mpStatus||''
   };
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
-    method: 'POST',
-    headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation'},
-    body: JSON.stringify(pedido)
+  await fetch(`${SUPABASE_URL}/rest/v1/pedidos`, {
+    method:'POST',
+    headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body: JSON.stringify(payload)
   });
-  return await res.json();
 }
 
 async function processarPagamento() {
-  if(!cart.length) { alert('Carrinho vazio!'); return; }
-  const nome = document.getElementById('nome').value.trim();
+  document.getElementById('errMsg').classList.remove('show');
+  if(!cart.length) { showErr('errMsg','Carrinho vazio!'); return; }
+  const nome  = document.getElementById('nome').value.trim();
   const email = document.getElementById('email').value.trim();
-  const cpf = document.getElementById('cpf').value.replace(/\D/g,'');
-  if(!nome || !email || !cpf) { alert('Preencha nome, e-mail e CPF.'); return; }
+  const cpf   = document.getElementById('cpf').value.replace(/\D/g,'');
+  if(!nome||!email||!cpf) { showErr('errMsg','Preencha nome, e-mail e CPF.'); return; }
 
-  document.getElementById('btnPagar').disabled = true;
-  document.getElementById('loadingPay').classList.add('show');
-
+  setLoading(true);
   try {
-    if(payMethod === 'pix') {
-      await processarPix(nome, email, cpf);
+    if(payMethod==='pix') {
+      await pagarPix(nome, email, cpf);
     } else {
-      await processarCartao(nome, email, cpf);
+      if(!cardFormReady) { throw new Error('Formulário do cartão ainda carregando, aguarde alguns segundos e tente novamente.'); }
+      await pagarCartao(email, cpf);
     }
   } catch(e) {
-    console.error(e);
-    alert('Erro ao processar pagamento: ' + e.message);
-    document.getElementById('btnPagar').disabled = false;
-    document.getElementById('loadingPay').classList.remove('show');
+    showErr('errMsg', e.message);
+  } finally {
+    setLoading(false);
   }
 }
 
-async function processarPix(nome, email, cpf) {
-  const total = getTotal();
-  const [firstName, ...rest] = nome.split(' ');
-  const payload = {
-    transaction_amount: total,
+async function pagarPix(nome, email, cpf) {
+  const [fn,...rn] = nome.split(' ');
+  const body = {
+    transaction_amount: getTotal(),
     description: 'AlmaFit — Pedido',
     payment_method_id: 'pix',
-    payer: {
-      email,
-      first_name: firstName,
-      last_name: rest.join(' ') || firstName,
-      identification: {type:'CPF', number: cpf}
-    }
+    payer: { email, first_name: fn, last_name: rn.join(' ')||fn, identification: {type:'CPF',number:cpf} }
   };
-
-  const res = await fetch('https://api.mercadopago.com/v1/payments', {
-    method: 'POST',
-    headers: {'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': 'almafit_' + Date.now()},
-    body: JSON.stringify(payload)
+  const r = await fetch('https://api.mercadopago.com/v1/payments', {
+    method:'POST',
+    headers:{'Authorization':'Bearer '+MP_ACCESS_TOKEN,'Content-Type':'application/json','X-Idempotency-Key':'pix_'+Date.now()},
+    body: JSON.stringify(body)
   });
-  const data = await res.json();
-  if(data.error) throw new Error(data.message || data.error);
+  const data = await r.json();
+  if(data.error) throw new Error(data.message||data.error);
 
-  const numero = gerarNumero();
-  await salvarPedido(numero, String(data.id), data.status, 'pix');
+  const num = gerarNumero();
+  await salvarPedido(num, data.id, data.status, 'pix');
   localStorage.removeItem('almafit_cart');
 
-  // Mostrar tela de sucesso com QR Code
   document.getElementById('checkoutWrap').classList.add('hide');
-  document.getElementById('loadingPay').classList.remove('show');
-  const ss = document.getElementById('successScreen');
-  ss.classList.add('show');
-  document.getElementById('successNum').textContent = 'Pedido #' + numero;
-  document.getElementById('successMsg').textContent = 'Aguardando confirmação do PIX. Você receberá um e-mail quando o pagamento for aprovado.';
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('successNum').textContent = 'Pedido #'+num;
+  document.getElementById('successMsg').textContent = 'Aguardando confirmação do PIX.';
 
-  if(data.point_of_interaction?.transaction_data) {
-    const txData = data.point_of_interaction.transaction_data;
+  const tx = data.point_of_interaction?.transaction_data;
+  if(tx) {
     document.getElementById('pixQr').classList.add('show');
-    if(txData.qr_code_base64) {
-      document.getElementById('qrImage').innerHTML = `<img src="data:image/png;base64,${txData.qr_code_base64}" style="width:200px;height:200px;margin:0 auto;display:block;border-radius:4px">`;
-    }
-    document.getElementById('pixCopiaECola').textContent = txData.qr_code || '';
-    window._pixCode = txData.qr_code || '';
+    if(tx.qr_code_base64) document.getElementById('qrImage').innerHTML = `<img src="data:image/png;base64,${tx.qr_code_base64}" style="width:180px;height:180px;margin:.75rem auto;display:block;border-radius:4px">`;
+    document.getElementById('pixCopiaECola').textContent = tx.qr_code||'';
+    window._pixCode = tx.qr_code||'';
   }
 }
 
-async function processarCartao(nome, email, cpf) {
-  const cardData = await cardFormInstance.getCardFormData();
-  const total = getTotal();
-  const [firstName, ...rest] = nome.split(' ');
-  const payload = {
-    transaction_amount: total,
-    token: cardData.token,
+async function pagarCartao(email, cpf) {
+  const data = await cardFormInstance.getCardFormData();
+  if(!data.token) throw new Error('Não foi possível tokenizar o cartão. Verifique os dados.');
+  const body = {
+    transaction_amount: getTotal(),
+    token: data.token,
     description: 'AlmaFit — Pedido',
-    installments: parseInt(cardData.installments),
-    payment_method_id: cardData.paymentMethodId,
-    payer: {
-      email,
-      identification: {type:'CPF', number: cpf}
-    }
+    installments: parseInt(data.installments)||1,
+    payment_method_id: data.paymentMethodId,
+    payer: { email, identification: {type:'CPF',number:cpf} }
   };
-
-  const res = await fetch('https://api.mercadopago.com/v1/payments', {
-    method: 'POST',
-    headers: {'Authorization': `Bearer ${MP_ACCESS_TOKEN}`, 'Content-Type': 'application/json', 'X-Idempotency-Key': 'almafit_' + Date.now()},
-    body: JSON.stringify(payload)
+  const r = await fetch('https://api.mercadopago.com/v1/payments', {
+    method:'POST',
+    headers:{'Authorization':'Bearer '+MP_ACCESS_TOKEN,'Content-Type':'application/json','X-Idempotency-Key':'card_'+Date.now()},
+    body: JSON.stringify(body)
   });
-  const data = await res.json();
-  if(data.error) throw new Error(data.message || data.error);
+  const resp = await r.json();
+  if(resp.error) throw new Error(resp.message||resp.error);
 
-  const numero = gerarNumero();
-  await salvarPedido(numero, String(data.id), data.status, 'cartao');
+  const num = gerarNumero();
+  await salvarPedido(num, resp.id, resp.status, 'cartao');
   localStorage.removeItem('almafit_cart');
 
   document.getElementById('checkoutWrap').classList.add('hide');
-  document.getElementById('loadingPay').classList.remove('show');
-  const ss = document.getElementById('successScreen');
-  ss.classList.add('show');
-  document.getElementById('successNum').textContent = 'Pedido #' + numero;
-  const statusMsg = data.status === 'approved' ? '✅ Pagamento aprovado! Você receberá um e-mail de confirmação.' : '⏳ Pagamento em análise. Você receberá um e-mail quando for aprovado.';
-  document.getElementById('successMsg').textContent = statusMsg;
+  document.getElementById('successScreen').classList.add('show');
+  document.getElementById('successNum').textContent = 'Pedido #'+num;
+  document.getElementById('successMsg').textContent = resp.status==='approved' ? '✅ Pagamento aprovado!' : '⏳ Pagamento em análise.';
 }
 
 function copiarPix() {
   if(window._pixCode) {
     navigator.clipboard.writeText(window._pixCode);
-    const btn = document.querySelector('.copy-btn');
-    btn.textContent = '✅ Copiado!';
-    setTimeout(() => btn.textContent = '📋 Copiar código PIX', 2000);
+    const b = document.querySelector('.copy-btn');
+    b.textContent='✅ Copiado!';
+    setTimeout(()=>b.textContent='📋 Copiar código PIX',2000);
   }
 }
 
