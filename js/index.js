@@ -1,5 +1,4 @@
-const SUPABASE_URL = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
+const API_BASE = '/api';
 
 // Imagens locais por produto
 const IMGS = {
@@ -15,9 +14,7 @@ let tamanhoSelecionado = null;
 
 async function carregarProdutos() {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/produtos?select=*&ativo=eq.true&order=criado_em.asc`, {
-      headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}
-    });
+    const res = await fetch(`${API_BASE}/produtos`);
     produtos = await res.json();
     renderProdutos();
   } catch(e) {

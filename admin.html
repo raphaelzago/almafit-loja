@@ -35,6 +35,8 @@ body{font-family:var(--sans);background:var(--black);color:var(--off);min-height
 .topbar-actions{display:flex;gap:10px;align-items:center}
 .btn-refresh{background:transparent;border:1px solid #222;color:#888;padding:8px 16px;border-radius:2px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
 .btn-refresh:hover{border-color:var(--pink);color:var(--pink)}
+.btn-logout{background:transparent;border:1px solid #222;color:#888;padding:8px 16px;border-radius:2px;cursor:pointer;font-size:12px;font-weight:600;letter-spacing:1px;text-transform:uppercase;transition:all .2s}
+.btn-logout:hover{border-color:var(--pink);color:var(--pink)}
 .btn-novo{background:var(--pink);border:none;color:#fff;padding:8px 20px;border-radius:2px;cursor:pointer;font-family:var(--display);font-size:16px;letter-spacing:1px;text-transform:uppercase;transition:background .2s}
 .btn-novo:hover{background:var(--pink-lt)}
 
@@ -204,6 +206,7 @@ td:first-child{color:var(--off);font-weight:500}
     <div class="topbar-actions">
       <button class="btn-refresh" onclick="loadAll()">↻ Atualizar</button>
       <button class="btn-novo" id="btnNovo" onclick="abrirNovoProduto()" style="display:none">+ Novo produto</button>
+      <button class="btn-logout" onclick="logout()">Sair</button>
     </div>
   </div>
 
@@ -390,26 +393,26 @@ td:first-child{color:var(--off);font-weight:500}
 <div class="toast" id="toast"></div>
 
 <script>
-const SUPA = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
-const KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
+const API_BASE = '/api';
 
 let pedidos = [], produtos = [], editandoId = null, imgBase64 = null;
 
 /* ══ LOAD ══ */
 async function loadAll() {
-  pedidos  = await apiFetch('pedidos','?select=*&order=criado_em.desc');
-  produtos = await apiFetch('produtos','?select=*&order=criado_em.desc');
+  pedidos  = await apiFetch('/pedidos');
+  produtos = await apiFetch('/produtos/admin');
   renderPedidos(pedidos);
   renderProdutos(produtos);
   renderMetricas(pedidos);
 }
 
-async function apiFetch(table, qs='', method='GET', body=null) {
-  const opts = { method, headers: {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json','Prefer':'return=representation'} };
+async function apiFetch(path, method='GET', body=null) {
+  const opts = { method, headers: {'Content-Type':'application/json'} };
   if(body) opts.body = JSON.stringify(body);
-  const r = await fetch(`${SUPA}/rest/v1/${table}${qs}`, opts);
-  if(!r.ok) { const e=await r.json(); throw new Error(e.message||'Erro'); }
-  return r.status===204 ? null : r.json();
+  const r = await fetch(`${API_BASE}${path}`, opts);
+  const data = r.status===204 ? null : await r.json();
+  if(!r.ok) throw new Error(data?.error || data?.message || 'Erro');
+  return data;
 }
 
 /* ══ MÉTRICAS ══ */
@@ -491,12 +494,25 @@ function abrirPedido(id) {
 }
 async function atualizarStatus(id) {
   const s = document.getElementById('statusSel').value;
-  await apiFetch('pedidos',`?id=eq.${id}`,'PATCH',{status:s,atualizado_em:new Date().toISOString()});
+  await apiFetch(`/pedidos/${id}`,'PATCH',{status:s,atualizado_em:new Date().toISOString()});
   toast('Status atualizado!','success');
   closePedidoDrawer();
   loadAll();
 }
 function fecharDrawerPedido(e) { if(e.target===document.getElementById('drawerPedidoOverlay')) closePedidoDrawer(); }
+
+async function checkAuth() {
+  const res = await fetch(`${API_BASE}/admin/check`);
+  if (!res.ok) return window.location.href = 'login.html';
+  await loadAll();
+  setInterval(loadAll, 30000);
+}
+
+async function logout() {
+  await fetch(`${API_BASE}/logout`, { method: 'POST' });
+  window.location.href = 'login.html';
+}
+
 function closePedidoDrawer() { document.getElementById('drawerPedidoOverlay').classList.remove('open'); }
 
 /* ══ PRODUTOS ══ */
@@ -652,10 +668,10 @@ async function salvarProduto() {
 
   try {
     if(editandoId) {
-      await apiFetch('produtos',`?id=eq.${editandoId}`,'PATCH', payload);
+      await apiFetch(`/produtos/${editandoId}`,'PATCH', payload);
       toast('Produto atualizado!','success');
     } else {
-      await apiFetch('produtos','','POST', payload);
+      await apiFetch('/produtos','POST', payload);
       toast('Produto cadastrado!','success');
     }
     closeProdDrawer();
@@ -669,7 +685,7 @@ async function salvarProduto() {
 
 /* TOGGLE ATIVO */
 async function toggleAtivo(id, ativo) {
-  await apiFetch('produtos',`?id=eq.${id}`,'PATCH',{ativo:!ativo});
+    await apiFetch(`/produtos/${id}`,'PATCH',{ativo:!ativo});
   toast(ativo?'Produto ocultado':'Produto ativado!','success');
   loadAll();
 }
@@ -677,7 +693,7 @@ async function toggleAtivo(id, ativo) {
 /* DELETAR */
 async function deletarProduto(id, nome) {
   if(!confirm(`Deletar "${nome}"? Esta ação não pode ser desfeita.`)) return;
-  await apiFetch('produtos',`?id=eq.${id}`,'DELETE');
+  await apiFetch(`/produtos/${id}`,'DELETE');
   toast('Produto deletado.','success');
   loadAll();
 }
@@ -701,8 +717,7 @@ function toast(msg, type='success') {
   setTimeout(()=>el.classList.remove('show'), 2800);
 }
 
-loadAll();
-setInterval(loadAll, 30000);
+checkAuth();
 </script>
 </body>
 </html>

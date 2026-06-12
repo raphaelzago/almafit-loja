@@ -171,10 +171,8 @@ input::placeholder{color:#444}
 </div>
 
 <script>
-const SUPA_URL    = 'https://pvdzpriyjassmqwbrcpn.supabase.co';
-const SUPA_KEY    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZHpwcml5amFzc21xd2JyY3BuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODEyMDkxOTksImV4cCI6MjA5Njc4NTE5OX0.5QDleXnTnoyLfInuLGS-z32RJhjByOfu3XdB5syUV9s';
+const API_BASE = '/api';
 const MP_PUB_KEY  = 'APP_USR-c7f639fd-cc32-48a7-a2ee-00bf5c3b1c0a';
-const EDGE_URL    = 'https://pvdzpriyjassmqwbrcpn.supabase.co/functions/v1/clever-worker';
 
 let cart = JSON.parse(localStorage.getItem('almafit_cart')||'[]');
 let payMethod = 'pix', mpInstance, cardForm, cardReady = false;
@@ -279,9 +277,9 @@ async function salvarPedido(num,mpId,mpStatus,forma) {
     itens:cart, subtotal:getTotal(), frete:0, total:getTotal(),
     forma_pagamento:forma, mp_payment_id:String(mpId||''), mp_status:mpStatus||''
   };
-  await fetch(`${SUPA_URL}/rest/v1/pedidos`,{
+  await fetch(`${API_BASE}/pedidos`,{
     method:'POST',
-    headers:{'apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify(p)
   });
 }
@@ -330,9 +328,9 @@ async function pagar() {
     }
 
     // Chama Edge Function (sem CORS)
-    const resp = await fetch(EDGE_URL, {
+    const resp = await fetch(`${API_BASE}/pay`, {
       method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SUPA_KEY},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify(body)
     });
     const data = await resp.json();
