@@ -139,7 +139,53 @@ footer{background:#060606;border-top:1px solid #0f0f0f;padding:2.5rem 5rem;displ
 .modal-cancel:hover{border-color:#555;color:var(--off)}
 .modal-add{flex:2;background:var(--pink);border:none;color:#fff;font-family:var(--display);font-size:16px;letter-spacing:1px;text-transform:uppercase;padding:12px;border-radius:2px;cursor:pointer;transition:background .15s}
 .modal-add:hover{background:var(--pink-lt)}
-</style>
+  @media (max-width: 900px) {
+    nav{padding:0 2rem}
+    .nav-links{gap:1rem;font-size:11px}
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .hero-left{padding:3.5rem 2rem 3.5rem 2rem}
+    .hero-sub{max-width:100%}
+    .hero-stats{flex-wrap:wrap;gap:1rem;margin-top:2.5rem;padding-top:1.5rem}
+    .hero-right{min-height:320px}
+    .produtos{padding:4rem 2rem}
+    .section-head{flex-direction:column;align-items:flex-start;gap:1rem}
+    .filters{margin-bottom:2rem}
+    .prod-grid{grid-template-columns:repeat(2,1fr)}
+    .cart-sidebar{width:min(420px,100%)}
+    footer{flex-wrap:wrap;justify-content:center;gap:1rem;padding:2rem 2rem}
+    .ft-links{flex-wrap:wrap;justify-content:center}
+    .manifesto{padding:5rem 2rem}
+  }
+
+  @media (max-width: 640px) {
+    nav{padding:0 1rem}
+    .nav-links{gap:.75rem}
+    .hero-left{padding:2.5rem 1.25rem 2.5rem 1.25rem}
+    .hero-tag{margin-bottom:1.5rem;font-size:10px}
+    h1{font-size:clamp(48px,10vw,78px)}
+    h1 .italic{font-size:clamp(32px,8vw,48px)}
+    .hero-sub{font-size:15px}
+    .btn-main{width:100%;padding:14px 0;text-align:center}
+    .hero-stats{gap:1rem}
+    .hero-right{min-height:260px}
+    .strip{padding:10px 0}
+    .strip-item{font-size:12px;padding:0 1.25rem}
+    .produtos{padding:3rem 1rem}
+    .prod-grid{grid-template-columns:1fr}
+    .prod-card{margin:0 auto}
+    .prod-img{height:220px}
+    .cart-sidebar{width:100%}
+    .cart-header{padding:1.25rem 1rem}
+    .cart-items{padding:1.25rem 1rem}
+    .cart-footer{padding:1.25rem 1rem}
+    .manifesto{padding:4rem 1rem}
+    .manifesto::before{font-size:35vw}
+    .modal{width:90vw;padding:1.75rem}
+    .modal-btns{flex-direction:column}
+    .modal-add,.modal-cancel{width:100%}
+    footer{padding:1.5rem 1rem;flex-direction:column;align-items:center;text-align:center}
+    .ft-links{justify-content:center}
+  }</style>
 </head>
 <body>
 
